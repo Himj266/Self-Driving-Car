@@ -5,6 +5,17 @@
 # Importing required libraries
 import numpy as np
 
+# Importing the Kivy packages
+## They are required for adding properties to the car
+from kivy.app import App
+from kivy.uix.widget import Widget
+from kivy.uix.button import Button
+from kivy.graphics import Color, Ellipse, Line
+from kivy.config import Config
+from kivy.properties import NumericProperty, ReferenceListProperty, ObjectProperty
+from kivy.vector import Vector
+from kivy.clock import Clock
+
 # import deep q network from brain or ai
 from ai import Dqn
 
@@ -33,4 +44,11 @@ def init():
  # creating car and the game structure
  
  ## creating car class, adding properties to car
- 
+ class Car (Widget):
+
+     angle = NumericProperty(0) # Defining angle to car
+     rotation = NumericProperty(0)  # Defining rotation to the car
+     velocity_x = NumericProperty(0)    # Defining x velocity
+     velocity_y = NumericProperty(0)    # Defining y velocity
+     velocity = ReferenceListProperty(velocity_x, velocity_y)   # Defining velocity vector to the car
+     
