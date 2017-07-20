@@ -17,11 +17,12 @@ score = []      # Rewards onto the sliding windows
 # Initializing the map
 first_update = True
 def init():
-    global sand
-    global goal_x
-    global goal_y
-    global first_update
-    sand = np.zeros((longueur, largeur))
-    goal_x = 20
-    goal_y = largeur - 20
-    first_update = False
+    global sand     # will contain info about sand position
+    global goal_x   # x-coordinate
+    global goal_y   # y-doordinate
+    global first_update # it remembers wheather its first initialization or not
+    sand = np.zeros((longueur, largeur))    # initialized sand to zero depicting that there is no sand at the start
+    goal_x = 20     # x-coordinate of destination
+    goal_y = largeur - 20   # y-coordinate of destination
+    first_update = False    # depicting that initialization is done
+    
