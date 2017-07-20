@@ -21,7 +21,7 @@ from ai import Dqn
 
 # Brain of Self driving car initializing, its a neural network
 brain = Dqn(5,3,0.9)    # arguements: inputs, nb_action, gamma(discount factor)
-action2rotation = [0, 20, -20]  # All actions 
+action2rotation = [0, 20, -20]  # All actions: it represents degree of deviation
 last_reward = 0     # Reward at this time
 score = []      # Rewards onto the sliding windows
 
@@ -82,13 +82,14 @@ def init():
          # Punishing the car if get close to sand
          ## It gets 1 because car tried to go through boundary of arena
          if self.sensor1_x>longueur-10 or self.sensor1_x<10 or self.sensor1_y>largeur-10 or self.sensor1_y<10:
-                self.signal1 = 1.   
+                self.signal1 = 1.   # sensor 1 detects full sand
          if self.sensor2_x>longueur-10 or self.sensor2_x<10 or self.sensor2_y>largeur-10 or self.sensor2_y<10:
-                self.signal2 = 1.
+                self.signal2 = 1.   # sensor 2 detects full sand
          if self.sensor3_x>longueur-10 or self.sensor3_x<10 or self.sensor3_y>largeur-10 or self.sensor3_y<10:
-                self.signal3 = 1.
+                self.signal3 = 1.   # sensor 3 detects full sand
 
 
+# Balls represent sensors in the car
 class Ball1(Widget):
     pass
 class Ball2(Widget):
@@ -105,25 +106,50 @@ class Game(Widget):
     ball2 = ObjectProperty(None)
     ball3 = ObjectProperty(None)
 
-    # Putting Car in the game
-    def serve_car(self):
-        self.car.center = self.center
-        self.car.velocity = Vector(6,0)
+    def serve_car(self): # starting the car when we launch the application
+        self.car.center = self.center # the car will start at the center of the map
+        self.car.velocity = Vector(6, 0) # the car will start to go horizontally to the right with a speed of 6
     
     # Updating the environment
     def update(self, dt):
-        global brain
-        global last_reward
-        global score
-        global last_distance
-        global goal_x
-        global goal_y
-        global longueur
-        global largeur
+        global brain    # AI
+        global last_reward  # Rewards 
+        global score    # the means of the rewards
+        global last_distance    # the last distance from the car to the goal
+        global goal_x   # x-coordinate goal
+        global goal_y   # y-coordinate goal
+        global longueur # width of the map
+        global largeur  # height of the map
 
         longueur = self.width   # Defining width
         largeur = self.height   # Defining height
         # If this is the starting then initialize the map
-        if first_update:
+        if fitst_update:
             init()
         
+        # Directing car towards goal
+        xx = goal_x - self.car.x
+        yy = goal_y - self.car.y
+        orientation = Vector(*self.car.velocity).angle((xx,yy))/180.    # if the car is heading perfectly towards the goal, then orientation = 0
+        # Last signal retrieval under process for updatation
+        ## orientation and -orientation are added so that exploartion increases and the network trains well rather than remembering all the paths 
+        ### This stabilizes our neural network 
+        #### our input state vector, composed of the three signals received by the three sensors, plus the orientation and -orientation
+        last_signal = [self.car.signal1, self.car.signal2, self.car.signal3, orientation, -orientation]
+        action = brain.update(last_reward, last_signal) # Action taken by our AI
+        score.append(brain.score()) # mean of the last 100 rewards to the reward window
+        rotation = action2rotation[action]  # converting the action played (0, 1 or 2) into the rotation angle (0°, 20° or -20°)
+        self.car.move(rotation) # moving the car according to this last rotation angle
+        distance = np.sqrt((self.car.x - goal_x)**2 + (self.car.y - goal_y)**2) # Eulers formula
+        self.ball1.pos = self.car.sensor1   # Updating position of front sensor
+        self.ball2.pos = self.car.sensor2   # Updating position of left sensor
+        self.ball3.pos = self.car.sensor3   # Updating position of right sensor
+
+        if sand[int(self.car.x),int(self.car.y)] > 0: # if the car is on the sand
+            self.car.velocity = Vector(1, 0).rotate(self.car.angle) # it is slowed down (speed = 1)
+            last_reward = -1 # and reward = -1
+        else:
+            self.car.velocity = Vector(6, 0).rotate(self.car.angle) # it goes to a normal speed (speed = 6)
+            last_reward = -0.2 # and it gets bad reward (-0.2)
+            if distance < last_distance: # however if it getting close to the goal
+                last_reward = 0.1 # it still gets slightly positive reward 0.1
