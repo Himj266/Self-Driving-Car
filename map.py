@@ -166,3 +166,10 @@ class Game(Widget):
         if self.car.y > self.height-10: # if the car is in the upper edge of the frame
             self.car.y = self.height-10 # it is not slowed down
             last_reward = -1 # but it gets bad reward -1
+        
+        if distance < 100: # when the car reaches its goal
+            # the goal becomes the bottom right corner of the map, and vice versa (updating of the x-coordinate of the goal)
+            goal_x = self.width - goal_x 
+            goal_y = self.height - goal_y 
+
+        last_distance = distance
