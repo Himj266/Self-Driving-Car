@@ -60,4 +60,8 @@ def init():
      sensor3_x = NumericProperty(0) # x-coordinate of sensor in right of car
      sensor3_y = NumericProperty(0) # y-coordinate of sensor in right of car
      sensor3 = ReferenceListProperty(sensor3_x, sensor3_y)  # Sensor for right of car
+     # Density Measurement: divide total number of 1 in square around the sensor divided by total number of cell
+     signal1 = NumericProperty(0)   # Measures sand density to front of car
+     signal2 = NumericProperty(0)   # Measures sand density to left of car
+     signal3 = NumericProperty(0)   # Measures sand density to right of car
      
