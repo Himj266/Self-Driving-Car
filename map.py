@@ -89,7 +89,6 @@ def init():
                 self.signal3 = 1.
 
 
-# i have proposed ball for more difficulty to car
 class Ball1(Widget):
     pass
 class Ball2(Widget):
@@ -99,3 +98,32 @@ class Ball3(Widget):
 
 
 # Creating the GAME
+class Game(Widget):
+    # Defining objects
+    car = ObjectProperty(None)
+    ball1 = ObjectProperty(None)
+    ball2 = ObjectProperty(None)
+    ball3 = ObjectProperty(None)
+
+    # Putting Car in the game
+    def serve_car(self):
+        self.car.center = self.center
+        self.car.velocity = Vector(6,0)
+    
+    # Updating the environment
+    def update(self, dt):
+        global brain
+        global last_reward
+        global score
+        global last_distance
+        global goal_x
+        global goal_y
+        global longueur
+        global largeur
+
+        longueur = self.width   # Defining width
+        largeur = self.height   # Defining height
+        # If this is the starting then initialize the map
+        if first_update:
+            init()
+        
