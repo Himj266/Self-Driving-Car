@@ -171,5 +171,12 @@ class Game(Widget):
             # the goal becomes the bottom right corner of the map, and vice versa (updating of the x-coordinate of the goal)
             goal_x = self.width - goal_x 
             goal_y = self.height - goal_y 
-
+        # Updating last distance to car to new_goal distance
         last_distance = distance
+
+
+####################### TASK TO BE DONE #####################
+# Graphical User Interface
+## with options to save and load trained model
+### Implementation to be done after ai.py completion 
+##############################################################
