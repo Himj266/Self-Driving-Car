@@ -25,4 +25,12 @@ def init():
     goal_x = 20     # x-coordinate of destination
     goal_y = largeur - 20   # y-coordinate of destination
     first_update = False    # depicting that initialization is done
-    
+
+ ## Initializing last distance
+ last_distance = 0  # It tells current distance of car from goal   
+
+ 
+ # creating car and the game structure
+ 
+ ## creating car class, adding properties to car
+ 
