@@ -21,4 +21,7 @@ def init():
     global goal_x
     global goal_y
     global first_update
-    sand = np.zeros
+    sand = np.zeros((longueur, largeur))
+    goal_x = 20
+    goal_y = largeur - 20
+    first_update = False
