@@ -3,7 +3,7 @@ A Self Driving Car
 
 The AI (Artificial Intelligence) for this self driving car will be written in pytorch.
 
-[Pytorch](http://pytorch.org/) is available only for windows and OSX. But you can install [docker](https://www.docker.com/) or [VM VirtualBox](https://www.virtualbox.org/) in case you have windows, to run this project.
+[Pytorch](http://pytorch.org/) is available only for LINUX and OSX. But you can install [docker](https://www.docker.com/) or [VM VirtualBox](https://www.virtualbox.org/) in case you have WINDOWS, to run this project.
 
 #### Important
 If you have Nvidia GPU on your system. Then Pytorch also offers [CUDA](https://www.geforce.com/hardware/technology/cuda) support.
