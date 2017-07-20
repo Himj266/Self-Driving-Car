@@ -64,4 +64,38 @@ def init():
      signal1 = NumericProperty(0)   # Measures sand density to front of car
      signal2 = NumericProperty(0)   # Measures sand density to left of car
      signal3 = NumericProperty(0)   # Measures sand density to right of car
-     
+
+     # move function directs the car where to move
+     def move (self, rotation):
+         self.pos = Vector(*self.velocity) + self.pos   # Updating position of car
+         self.rotation = rotation   # telling the action learned by Deep q learning
+         self.angle = self.angle + self.rotation    # modifying the trajectory of car
+         # Updating sensor direction
+         self.sensor1 = Vector(30, 0).rotate(self.angle) + self.pos
+         self.sensor2 = Vector(30, 0).rotate((self.angle+30)%360) + self.pos
+         self.sensor3 = Vector(30, 0).rotate((self.angle-30)%360) + self.pos
+         # calculating sand density in each sensor
+         ## Taking sum of elements of 10*10 matrix and dividing it by 20*20 ie 400 to get density of sand
+         self.signal1 = int(np.sum(sand[int(self.sensor1_x)-10:int(self.sensor1_x)+10, int(self.sensor1_y)-10:int(self.sensor1_y)+10]))/400.
+         self.signal2 = int(np.sum(sand[int(self.sensor2_x)-10:int(self.sensor2_x)+10, int(self.sensor2_y)-10:int(self.sensor2_y)+10]))/400.
+         self.signal3 = int(np.sum(sand[int(self.sensor3_x)-10:int(self.sensor3_x)+10, int(self.sensor3_y)-10:int(self.sensor3_y)+10]))/400.
+         # Punishing the car if get close to sand
+         ## It gets 1 because car tried to go through boundary of arena
+         if self.sensor1_x>longueur-10 or self.sensor1_x<10 or self.sensor1_y>largeur-10 or self.sensor1_y<10:
+                self.signal1 = 1.   
+         if self.sensor2_x>longueur-10 or self.sensor2_x<10 or self.sensor2_y>largeur-10 or self.sensor2_y<10:
+                self.signal2 = 1.
+         if self.sensor3_x>longueur-10 or self.sensor3_x<10 or self.sensor3_y>largeur-10 or self.sensor3_y<10:
+                self.signal3 = 1.
+
+
+# i have proposed ball for more difficulty to car
+class Ball1(Widget):
+    pass
+class Ball2(Widget):
+    pass
+class Ball3(Widget):
+    pass
+
+
+# Creating the GAME
