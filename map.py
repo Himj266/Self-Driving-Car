@@ -153,3 +153,16 @@ class Game(Widget):
             last_reward = -0.2 # and it gets bad reward (-0.2)
             if distance < last_distance: # however if it getting close to the goal
                 last_reward = 0.1 # it still gets slightly positive reward 0.1
+
+        if self.car.x < 10: # if the car is in the left edge of the frame
+            self.car.x = 10 # it is not slowed down
+            last_reward = -1 # but it gets bad reward -1
+        if self.car.x > self.width-10: # if the car is in the right edge of the frame
+            self.car.x = self.width-10 # it is not slowed down
+            last_reward = -1 # but it gets bad reward -1
+        if self.car.y < 10: # if the car is in the bottom edge of the frame
+            self.car.y = 10 # it is not slowed down
+            last_reward = -1 # but it gets bad reward -1
+        if self.car.y > self.height-10: # if the car is in the upper edge of the frame
+            self.car.y = self.height-10 # it is not slowed down
+            last_reward = -1 # but it gets bad reward -1
