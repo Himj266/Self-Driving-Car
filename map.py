@@ -51,4 +51,13 @@ def init():
      velocity_x = NumericProperty(0)    # Defining x velocity
      velocity_y = NumericProperty(0)    # Defining y velocity
      velocity = ReferenceListProperty(velocity_x, velocity_y)   # Defining velocity vector to the car
+     sensor1_x = NumericProperty(0) # x-coordinate of sensor in front of car
+     sensor1_y = NumericProperty(0) # y-coordinate of sensor in front of car
+     sensor1 = ReferenceListProperty(sensor1_x, sensor1_y)  # Sensor for front of car
+     sensor2_x = NumericProperty(0) # x-coordinate of sensor in left of car
+     sensor2_y = NumericProperty(0) # y-coordinate of sensor in left of car
+     sensor2 = ReferenceListProperty(sensor2_x, sensor2_y)  # Sensor for left of car
+     sensor3_x = NumericProperty(0) # x-coordinate of sensor in right of car
+     sensor3_y = NumericProperty(0) # y-coordinate of sensor in right of car
+     sensor3 = ReferenceListProperty(sensor3_x, sensor3_y)  # Sensor for right of car
      
