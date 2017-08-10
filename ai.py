@@ -3,6 +3,9 @@
 # AI for self driving car
 
 # Importing libraries
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
 
 # Creating the architecture of the Neural Network
 
