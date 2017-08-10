@@ -38,55 +38,54 @@ def init():
     first_update = False    # depicting that initialization is done
 
  ## Initializing last distance
- last_distance = 0  # It tells current distance of car from goal   
+last_distance = 0  # It tells current distance of car from goal   
 
  
- # creating car and the game structure
+# creating car and the game structure
  
- ## creating car class, adding properties to car
- class Car (Widget):
+## creating car class, adding properties to car
+class Car (Widget):
+    angle = NumericProperty(0) # Defining angle to car
+    rotation = NumericProperty(0)  # Defining rotation to the car
+    velocity_x = NumericProperty(0)    # Defining x velocity
+    velocity_y = NumericProperty(0)    # Defining y velocity
+    velocity = ReferenceListProperty(velocity_x, velocity_y)   # Defining velocity vector to the car
+    sensor1_x = NumericProperty(0) # x-coordinate of sensor in front of car
+    sensor1_y = NumericProperty(0) # y-coordinate of sensor in front of car
+    sensor1 = ReferenceListProperty(sensor1_x, sensor1_y)  # Sensor for front of car
+    sensor2_x = NumericProperty(0) # x-coordinate of sensor in left of car
+    sensor2_y = NumericProperty(0) # y-coordinate of sensor in left of car
+    sensor2 = ReferenceListProperty(sensor2_x, sensor2_y)  # Sensor for left of car
+    sensor3_x = NumericProperty(0) # x-coordinate of sensor in right of car
+    sensor3_y = NumericProperty(0) # y-coordinate of sensor in right of car
+    sensor3 = ReferenceListProperty(sensor3_x, sensor3_y)  # Sensor for right of car
+    # Density Measurement: divide total number of 1 in square around the sensor divided by total number of cell
+    signal1 = NumericProperty(0)   # Measures sand density to front of car
+    signal2 = NumericProperty(0)   # Measures sand density to left of car
+    signal3 = NumericProperty(0)   # Measures sand density to right of car
 
-     angle = NumericProperty(0) # Defining angle to car
-     rotation = NumericProperty(0)  # Defining rotation to the car
-     velocity_x = NumericProperty(0)    # Defining x velocity
-     velocity_y = NumericProperty(0)    # Defining y velocity
-     velocity = ReferenceListProperty(velocity_x, velocity_y)   # Defining velocity vector to the car
-     sensor1_x = NumericProperty(0) # x-coordinate of sensor in front of car
-     sensor1_y = NumericProperty(0) # y-coordinate of sensor in front of car
-     sensor1 = ReferenceListProperty(sensor1_x, sensor1_y)  # Sensor for front of car
-     sensor2_x = NumericProperty(0) # x-coordinate of sensor in left of car
-     sensor2_y = NumericProperty(0) # y-coordinate of sensor in left of car
-     sensor2 = ReferenceListProperty(sensor2_x, sensor2_y)  # Sensor for left of car
-     sensor3_x = NumericProperty(0) # x-coordinate of sensor in right of car
-     sensor3_y = NumericProperty(0) # y-coordinate of sensor in right of car
-     sensor3 = ReferenceListProperty(sensor3_x, sensor3_y)  # Sensor for right of car
-     # Density Measurement: divide total number of 1 in square around the sensor divided by total number of cell
-     signal1 = NumericProperty(0)   # Measures sand density to front of car
-     signal2 = NumericProperty(0)   # Measures sand density to left of car
-     signal3 = NumericProperty(0)   # Measures sand density to right of car
-
-     # move function directs the car where to move
-     def move (self, rotation):
-         self.pos = Vector(*self.velocity) + self.pos   # Updating position of car
-         self.rotation = rotation   # telling the action learned by Deep q learning
-         self.angle = self.angle + self.rotation    # modifying the trajectory of car
-         # Updating sensor direction
-         self.sensor1 = Vector(30, 0).rotate(self.angle) + self.pos
-         self.sensor2 = Vector(30, 0).rotate((self.angle+30)%360) + self.pos
-         self.sensor3 = Vector(30, 0).rotate((self.angle-30)%360) + self.pos
-         # calculating sand density in each sensor
-         ## Taking sum of elements of 10*10 matrix and dividing it by 20*20 ie 400 to get density of sand
-         self.signal1 = int(np.sum(sand[int(self.sensor1_x)-10:int(self.sensor1_x)+10, int(self.sensor1_y)-10:int(self.sensor1_y)+10]))/400.
-         self.signal2 = int(np.sum(sand[int(self.sensor2_x)-10:int(self.sensor2_x)+10, int(self.sensor2_y)-10:int(self.sensor2_y)+10]))/400.
-         self.signal3 = int(np.sum(sand[int(self.sensor3_x)-10:int(self.sensor3_x)+10, int(self.sensor3_y)-10:int(self.sensor3_y)+10]))/400.
-         # Punishing the car if get close to sand
-         ## It gets 1 because car tried to go through boundary of arena
-         if self.sensor1_x>longueur-10 or self.sensor1_x<10 or self.sensor1_y>largeur-10 or self.sensor1_y<10:
-                self.signal1 = 1.   # sensor 1 detects full sand
-         if self.sensor2_x>longueur-10 or self.sensor2_x<10 or self.sensor2_y>largeur-10 or self.sensor2_y<10:
-                self.signal2 = 1.   # sensor 2 detects full sand
-         if self.sensor3_x>longueur-10 or self.sensor3_x<10 or self.sensor3_y>largeur-10 or self.sensor3_y<10:
-                self.signal3 = 1.   # sensor 3 detects full sand
+    # move function directs the car where to move
+    def move (self, rotation):
+        self.pos = Vector(*self.velocity) + self.pos   # Updating position of car
+        self.rotation = rotation   # telling the action learned by Deep q learning
+        self.angle = self.angle + self.rotation    # modifying the trajectory of car
+        # Updating sensor direction
+        self.sensor1 = Vector(30, 0).rotate(self.angle) + self.pos
+        self.sensor2 = Vector(30, 0).rotate((self.angle+30)%360) + self.pos
+        self.sensor3 = Vector(30, 0).rotate((self.angle-30)%360) + self.pos
+        # calculating sand density in each sensor
+        ## Taking sum of elements of 10*10 matrix and dividing it by 20*20 ie 400 to get density of sand
+        self.signal1 = int(np.sum(sand[int(self.sensor1_x)-10:int(self.sensor1_x)+10, int(self.sensor1_y)-10:int(self.sensor1_y)+10]))/400.
+        self.signal2 = int(np.sum(sand[int(self.sensor2_x)-10:int(self.sensor2_x)+10, int(self.sensor2_y)-10:int(self.sensor2_y)+10]))/400.
+        self.signal3 = int(np.sum(sand[int(self.sensor3_x)-10:int(self.sensor3_x)+10, int(self.sensor3_y)-10:int(self.sensor3_y)+10]))/400.
+        # Punishing the car if get close to sand
+        ## It gets 1 because car tried to go through boundary of arena
+        if self.sensor1_x>longueur-10 or self.sensor1_x<10 or self.sensor1_y>largeur-10 or self.sensor1_y<10:
+            self.signal1 = 1.   # sensor 1 detects full sand
+        if self.sensor2_x>longueur-10 or self.sensor2_x<10 or self.sensor2_y>largeur-10 or self.sensor2_y<10:
+            self.signal2 = 1.   # sensor 2 detects full sand
+        if self.sensor3_x>longueur-10 or self.sensor3_x<10 or self.sensor3_y>largeur-10 or self.sensor3_y<10:
+            self.signal3 = 1.   # sensor 3 detects full sand
 
 
 # Balls represent sensors in the car
