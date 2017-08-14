@@ -10,6 +10,7 @@ import torch
 import torch.nn as nn   # Neural Network class of torch
 import torch.nn.functional as F # Functional Class of torch
 from torch.autograd import Variable # for making pytorch variables (tensors)
+import torch.optim as optim
 
 # Creating the architecture of the Neural Network
 
@@ -33,8 +34,8 @@ class Network(nn.Module):
 class ReplayMemory(object):
     
     def __init__(self, capacity):
-        self.capacity = capacity    # This will check if our memory contains 100 transitions or not
-        self.memory = []            # This will contain all 100 transitions
+        self.capacity = capacity    # This will check if our memory contains 100000 transitions or not
+        self.memory = []            # This will contain all 100000 transitions
 
     def push(self, event):          # Push function appends last event to memory, event is a tupple of 4 elements containg S(t), S(t+1), a(t), Reward(t)
         self.memory.append(event)   # Appending transition/event to memory
@@ -44,3 +45,19 @@ class ReplayMemory(object):
     def sample(self, batch_size):               # Sampling experiences
         samples = zip(*random.sample(self.memory, batch_size))
         return map(lambda x: Variable(torch.cat(x,0)), samples)
+
+# Implementing Deep Q Learning
+
+class Dqn():
+    
+    def __init__(self, input_size, nb_action, gamma):
+        self.gamma = 0
+        self.reward_window = []
+        self.model = Network(input_size, nb_action)
+        self.memory = ReplayMemory(100000)
+        self.optimizer = optim.Adam(self.model.parameters(), lr=0.001)  # Using Adam opimizer
+        self.last_state = torch.Tensor(input_size).unsqueeze(0)
+        self.last_action = 0
+        self.last_reward = 0
+
+
