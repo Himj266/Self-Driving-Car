@@ -9,6 +9,7 @@ import random
 import torch
 import torch.nn as nn   # Neural Network class of torch
 import torch.nn.functional as F # Functional Class of torch
+from torch.autograd import Variable # for making pytorch variables (tensors)
 
 # Creating the architecture of the Neural Network
 
@@ -39,3 +40,7 @@ class ReplayMemory(object):
         self.memory.append(event)   # Appending transition/event to memory
         if len(self.memory) > self.capacity:    # Checking the memory for its capacity 
             del self.memory[0]                  # If the memory is full then we delete first memory that our car gathered
+
+    def sample(self, batch_size):               # Sampling experiences
+        samples = zip(*random.sample(self.memory, batch_size))
+        return map(lambda x: Variable(torch.cat(x,0)), samples)
