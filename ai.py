@@ -93,5 +93,7 @@ class Dqn():
             del self.reward_window[0]
         return action                                   # return action as required
 
-
+    def score(self):                                    # Mean of all rewards in the reward window
+        return sum(self.reward_window)/(len(self.reward_window)+1.)  # adding 1 to denominator to avoid infinity problem
+        
 
