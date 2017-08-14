@@ -102,4 +102,12 @@ class Dqn():
             "optimizer" :self.optimizer.state_dict()
         }, 'last_brain.pth')
 
-    
+    def load(self):                                     # Loading our checkpoint from last_brain.pth if its exists
+        if os.path.isfile('last_brain.pth'):
+            print("=> Loading Checkpoint...")
+            checkpoint = torch.load('last_brain.pth')
+            self.model.load_state_dict(checkpoint['state_dict'])
+            self.optimizer.load_state_dict(checkpoint['optimizer'])
+            print("Done!")
+        else:
+            print("No Checkpoint Found!")
