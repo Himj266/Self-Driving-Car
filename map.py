@@ -235,3 +235,8 @@ class CarApp(App):
         parent.add_widget(savebtn)
         parent.add_widget(loadbtn)
         return parent
+
+    def clear_canvas(self, obj): # clear button
+        global sand
+        self.painter.canvas.clear()
+        sand = np.zeros((longueur,largeur))
