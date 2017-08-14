@@ -3,9 +3,12 @@
 # AI for self driving car
 
 # Importing libraries
+import numpy as np  # This is for working with arrays
+import os   # This is to retrieve saved brain
+import random
 import torch
-import torch.nn as nn
-import torch.nn.functional as F
+import torch.nn as nn   # Neural Network class of torch
+import torch.nn.functional as F # Functional Class of torch
 
 # Creating the architecture of the Neural Network
 
