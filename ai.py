@@ -63,7 +63,8 @@ class Dqn():
         self.last_reward = 0
     
     def select_action(self, state):
-        probs = F.softmax(self, self.model(Variable(state))*100)  # Converting state tensor to Variable for fast computation but we have to declare Volatile=True to specify that we dont want to compute its gradients and dont want to have it in backpropagation operation.
+        # Converting state tensor to Variable for fast computation but we have to declare Volatile=True to specify that we dont want to compute its gradients and dont want to have it in backpropagation operation.
+        probs = F.softmax(self, self.model(Variable(state))*100)  # Temperature coff = 100 so that we can have better look at each option.(At Temperature coff -> infinity the probablity for each action tend to equalize and if temperature coff -> 0 probability for each action tend to shift towards one on the action)
         action = probs.multinomial()
         return action.data[0,0]
 
