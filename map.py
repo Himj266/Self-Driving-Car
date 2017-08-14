@@ -246,3 +246,11 @@ class CarApp(App):
         brain.save()
         plt.plot(scores)
         plt.show()
+    
+    def load(self, obj): # load button
+        print("loading last saved brain...")
+        brain.load()
+
+# Running the app
+if __name__ == '__main__':
+    CarApp().run()
