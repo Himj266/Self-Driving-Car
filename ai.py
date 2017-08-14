@@ -79,3 +79,19 @@ class Dqn():
         td_loss.backward(retain_variables=True)                                             # backpropagation
         self.opimizer.step()                                                                # Updating weights
 
+    def update(self, reward, new_signal):
+        new_state = torch.Tensor(new_signal).float().unsqueeze(0)   # new state 
+        self.memory.push((last_state, new_state, torch.LongTensor([int(self.last_action)], torch.Tensor(self.last_reward))))    # Updating memory after reaching new state
+        action = self.select_action(new_state)          # action selected based on new state
+        if len(self.memory.memory) > 100:               # if we have more than 100 memories do sampling
+            batch_state, batch_next_state, batch_reward, batch_action = self.memory.sample(100)
+        self.last_state = new_state                     # update last_state, last_action, last_reward with new values
+        self.last_action = action
+        self.last_reward = reward
+        self.reward_window.append(reward)
+        if len(self.reward_window) > 1000:              # if our reward window has more than 1000 values than delete the first value in it
+            del self.reward_window[0]
+        return action                                   # return action as required
+
+
+
