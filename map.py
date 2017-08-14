@@ -216,3 +216,4 @@ class MyPaintWidget(Widget):
             last_x = x
             last_y = y
 
+# API and switches interface
