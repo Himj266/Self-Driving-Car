@@ -68,4 +68,12 @@ class Dqn():
         action = probs.multinomial()
         return action.data[0,0]
 
+    def learn(self, batch_state, batch_next_state, batch_reward, batch_action):
+        outputs = self.model(batch_state).gather(1, batch_action.unsqueeze(1)).squeeze(1)   # getting q values
+        next_outputs = self.model(batch_next_state).detach().max(1)[0]                      # getting q value of next state
+        target = batch_reward + self.gamma*next_outputs                                     # calculating theoritical q value i.e q(s(t)) = r(s,a) + gamma*max(q(a,s(t+1))) for every action possible
+        td_loss = F.smooth_l1_loss(outputs, target)                                         # Loss = actual - predicted
+        self.opimizer.zero_grad()                                                           # Reinitializing the optimizer at each iteration of loop
+        td_loss.backward(retain_variables=True)                                             # backpropagation
+        self.opimizer.step()                                                                # Updating weights
 
