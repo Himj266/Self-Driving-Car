@@ -201,3 +201,18 @@ class MyPaintWidget(Widget):
             n_points = 0
             length = 0
             sand[int(touch.x),int(touch.y)] = 1
+    
+    def on_touch_move(self, touch): # putting some sand when we move the mouse while pressing left
+        global length,n_points,last_x,last_y
+        if touch.button=='left':
+            touch.ud['line'].points += [touch.x, touch.y]
+            x = int(touch.x)
+            y = int(touch.y)
+            length += np.sqrt(max((x - last_x)**2 + (y - last_y)**2, 2))
+            n_points += 1.
+            density = n_points/(length)
+            touch.ud['line'].width = int(20*density + 1)
+            sand[int(touch.x) - 10 : int(touch.x) + 10, int(touch.y) - 10 : int(touch.y) + 10] = 1
+            last_x = x
+            last_y = y
+
