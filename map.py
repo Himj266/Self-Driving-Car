@@ -240,3 +240,9 @@ class CarApp(App):
         global sand
         self.painter.canvas.clear()
         sand = np.zeros((longueur,largeur))
+
+    def save(self, obj): # save button
+        print("saving brain...")
+        brain.save()
+        plt.plot(scores)
+        plt.show()
