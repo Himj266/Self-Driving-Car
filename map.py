@@ -217,3 +217,21 @@ class MyPaintWidget(Widget):
             last_y = y
 
 # API and switches interface
+class CarApp(App):
+    
+    def build(self): # building the app
+        parent = Game()
+        parent.serve_car()
+        Clock.schedule_interval(parent.update, 1.0 / 60.0)
+        self.painter = MyPaintWidget()
+        clearbtn = Button(text='clear')
+        savebtn = Button(text='save',pos=(parent.width,0))
+        loadbtn = Button(text='load',pos=(2*parent.width,0))
+        clearbtn.bind(on_release=self.clear_canvas)
+        savebtn.bind(on_release=self.save)
+        loadbtn.bind(on_release=self.load)
+        parent.add_widget(self.painter)
+        parent.add_widget(clearbtn)
+        parent.add_widget(savebtn)
+        parent.add_widget(loadbtn)
+        return parent
