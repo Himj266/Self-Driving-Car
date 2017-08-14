@@ -18,10 +18,19 @@ class Network(nn.Module):
         super(Network, self).__init__()
         self.input_size = input_size
         self.nb_action = nb_action
-        self.fc1 = nn.Linear(input_size, 30)
-        self.fc2 = nn.Linear(30, nb_action)
+        self.fc1 = nn.Linear(input_size, 30)    # Dense Connection between input layer and hidden layer
+        self.fc2 = nn.Linear(30, nb_action)     # Dense Connection between hidden layer and output layer
     
     def forward(self, state):
-        x = F.relu(self.fc1(state))
-        q_values = self.fc2(x)
+        x = F.relu(self.fc1(state))             # Hidden State : x
+        q_values = self.fc2(x)                  # Q values
         return q_values
+
+# Implementing Experience Replay
+## Analyzing last 100 memories in batches to learn from the events that occured for less time in our training
+
+class ReplayMemory(object):
+    
+    def __init__(self, capacity):
+        self.capacity = capacity    # This will check if our memory contains 100 transitions or not
+        self.memory = []            # This will contain all 100 transitions
