@@ -35,7 +35,7 @@ length = 0 # the length of the last drawing
 brain = Dqn(5,3,0.9)    # arguements: inputs, nb_action, gamma(discount factor)
 action2rotation = [0, 20, -20]  # All actions: it represents degree of deviation
 last_reward = 0     # Reward at this time
-score = []      # Rewards onto the sliding windows
+scores = []      # Rewards onto the sliding windows
 
 # Initializing the map
 first_update = True
@@ -148,7 +148,7 @@ class Game(Widget):
         #### our input state vector, composed of the three signals received by the three sensors, plus the orientation and -orientation
         last_signal = [self.car.signal1, self.car.signal2, self.car.signal3, orientation, -orientation]
         action = brain.update(last_reward, last_signal) # Action taken by our AI
-        score.append(brain.score()) # mean of the last 100 rewards to the reward window
+        scores.append(brain.score()) # mean of the last 100 rewards to the reward window
         rotation = action2rotation[action]  # converting the action played (0, 1 or 2) into the rotation angle (0, 20 or -20)
         self.car.move(rotation) # moving the car according to this last rotation angle
         distance = np.sqrt((self.car.x - goal_x)**2 + (self.car.y - goal_y)**2) # Eulers formula
