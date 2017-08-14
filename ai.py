@@ -96,4 +96,10 @@ class Dqn():
     def score(self):                                    # Mean of all rewards in the reward window
         return sum(self.reward_window)/(len(self.reward_window)+1.)  # adding 1 to denominator to avoid infinity problem
         
+    def save(self):                                     # saving our brain in last_brain.pth file
+        torch.save({
+            "state_dict":self.model.state_dict(),
+            "optimizer" :self.optimizer.state_dict()
+        }, 'last_brain.pth')
 
+    
