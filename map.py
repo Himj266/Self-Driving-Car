@@ -125,7 +125,7 @@ class Game(Widget):
     def update(self, dt):
         global brain    # AI
         global last_reward  # Rewards 
-        global score    # the means of the rewards
+        global scores    # the means of the rewards
         global last_distance    # the last distance from the car to the goal
         global goal_x   # x-coordinate goal
         global goal_y   # y-coordinate goal
