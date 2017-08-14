@@ -188,3 +188,16 @@ class Game(Widget):
 ## with options to save and load trained model
 ### Implementation to be done after ai.py completion 
 ##############################################################
+class MyPaintWidget(Widget):
+    
+    def on_touch_down(self, touch): # putting some sand when we do a left click
+        global length,n_points,last_x,last_y
+        with self.canvas:
+            Color(0.8,0.7,0)
+            d=10.
+            touch.ud['line'] = Line(points = (touch.x, touch.y), width = 10)
+            last_x = int(touch.x)
+            last_y = int(touch.y)
+            n_points = 0
+            length = 0
+            sand[int(touch.x),int(touch.y)] = 1
