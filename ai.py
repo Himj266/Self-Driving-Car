@@ -9,8 +9,10 @@ import random
 import torch
 import torch.nn as nn   # Neural Network class of torch
 import torch.nn.functional as F # Functional Class of torch
-from torch.autograd import Variable # for making pytorch variables (tensors)
 import torch.optim as optim
+import torch.autograd as autograd
+from torch.autograd import Variable # for making pytorch variables (tensors)
+
 
 # Creating the architecture of the Neural Network
 
@@ -56,8 +58,13 @@ class Dqn():
         self.model = Network(input_size, nb_action)
         self.memory = ReplayMemory(100000)
         self.optimizer = optim.Adam(self.model.parameters(), lr=0.001)  # Using Adam opimizer
-        self.last_state = torch.Tensor(input_size).unsqueeze(0)
+        self.last_state = torch.Tensor(input_size).unsqueeze(0)         # Making a tensor of state
         self.last_action = 0
         self.last_reward = 0
+    
+    def select_action(self, state):
+        probs = F.softmax(self, self.model(Variable(state))*100)  # Converting state tensor to Variable for fast computation but we have to declare Volatile=True to specify that we dont want to compute its gradients and dont want to have it in backpropagation operation.
+        action = probs.multinomial()
+        return action.data[0,0]
 
 
