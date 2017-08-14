@@ -34,3 +34,8 @@ class ReplayMemory(object):
     def __init__(self, capacity):
         self.capacity = capacity    # This will check if our memory contains 100 transitions or not
         self.memory = []            # This will contain all 100 transitions
+
+    def push(self, event):          # Push function appends last event to memory, event is a tupple of 4 elements containg S(t), S(t+1), a(t), Reward(t)
+        self.memory.append(event)   # Appending transition/event to memory
+        if len(self.memory) > self.capacity:    # Checking the memory for its capacity 
+            del self.memory[0]                  # If the memory is full then we delete first memory that our car gathered
