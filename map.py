@@ -19,6 +19,15 @@ from kivy.clock import Clock
 # import deep q network from brain or ai
 from ai import Dqn
 
+# Adding this line if we don't want the right click to put a red point
+Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
+
+# Introducing last_x and last_y, used to keep the last point in memory when we draw the sand on the map
+last_x = 0
+last_y = 0
+n_points = 0 # the total number of points in the last drawing
+length = 0 # the length of the last drawing
+
 # Brain of Self driving car initializing, its a neural network
 brain = Dqn(5,3,0.9)    # arguements: inputs, nb_action, gamma(discount factor)
 action2rotation = [0, 20, -20]  # All actions: it represents degree of deviation
